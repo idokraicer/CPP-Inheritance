@@ -8,6 +8,7 @@ Republican::Republican(const string& firstname, const string& lastname, int id, 
 : Politician(firstname, lastname, id, power) {
     if(type == 'L'){
         inner = new Leader(firstname, lastname, id, power);
+
     }
     else if(type == 'S'){
         inner = new Social(firstname, lastname, id, power);

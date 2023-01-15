@@ -3,6 +3,7 @@
 //
 
 #include "Politician.h"
+#include "Error.h"
 
 
 string Politician::getFirstname() const {

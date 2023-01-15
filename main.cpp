@@ -29,16 +29,48 @@ int main(int argc, char* argv[]) {
         cin >> menuOption;
         switch(menuOption){
             case '1':
-                politicalSys->addPolitician();
+                cout << "---Create Politician---" << endl;
+                while(true) {
+                    try {
+                        politicalSys->addPolitician();
+                        break;
+                    } catch (Error &e) {
+                        cout << e.what();
+                    }
+                }
                 break;
             case '2':
-                politicalSys->addParty();
+                cout << "---Create Party---" << endl;
+                while(true){
+                    try{
+                        politicalSys->addParty();
+                        break;
+                    }catch(Error& e){
+                        cout << e.what();
+                    }
+                }
                 break;
             case '3':
-                politicalSys->removePolitician();
+                cout << "---Remove Politician---" << endl;
+                while(true){
+                    try{
+                        politicalSys->removePolitician();
+                        break;
+                    }catch(Error& e){
+                        cout << e.what();
+                    }
+                }
                 break;
             case '4':
-                politicalSys->removeParty();
+                cout << "---Remove Party---" << endl;
+                while(true){
+                    try{
+                        politicalSys->removeParty();
+                        break;
+                    }catch(Error& e){
+                        cout << e.what();
+                    }
+                }
                 break;
             case '5':
                 politicalSys->elections();

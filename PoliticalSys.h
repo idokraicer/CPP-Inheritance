@@ -13,6 +13,7 @@
 #include <sstream>
 #include <limits>
 #include <bits/stdc++.h>
+#include "Error.h"
 
 
 class PoliticalSys {
@@ -40,25 +41,28 @@ public:
     void printRepublicanParties();
     void printDemocraticParties();
     friend ostream& operator<<(ostream& os, const PoliticalSys& politicalSys);
-    void addRepublicanToParty(Politician* r);
-    void addDemocraticToParty(Politician* d);
     void removePolitician();
-
     void removeParty();
 
     void elections();
 
     void BiggestParty();
+
     virtual ~PoliticalSys();
-
-
     bool checkIfValidID(int id);
+
 
     bool politicianInVector(vector<Politician *> politicians, Politician *politician);
 
     bool checkIfValidParty(string basicString);
 
     void heapifyBiggestVector();
+
+    void addRepublicanToParty(Politician* r);
+    void addDemocraticToParty(Politician* d);
+
+    void addRepublicanToParty(Politician *r, Party *p);
+    void addDemocraticToParty(Politician *d, Party *p);
 };
 
 

@@ -15,7 +15,7 @@ bool PoliticalSys::politicianInVector(vector<Politician *> politicians, Politici
     return false;
 }
 
-void PoliticalSys::heapifyBiggestVector(){
+void PoliticalSys::heapifyBiggestVector() {
     make_heap(_biggestParty.begin(), _biggestParty.end(),
               [](Party *a, Party *b) { return compareParties(a, b); });
 }
@@ -33,41 +33,27 @@ ostream &operator<<(ostream &os, const PoliticalSys &politicalSys) {
 }
 
 void PoliticalSys::addParty() {
-    cout << "---Create Party---" << endl;
     string name;
-    do {
-        cout << "Name: " << endl;
-        cin >> name;
-        char type;
-        cout << "Republican or Democratic party " << endl;
-        cin >> type;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << "Please enter valid details" << endl;
-            continue;
-        } else if (checkIfValidParty(name)) {
-            cout << "Please enter valid details" << endl;
-            continue;
-        } else {
-            if (type == 'R') {
-                addParty(name, type);
-                for (auto r: _republicans) {
-                    addRepublicanToParty(r);
-                }
-                break;
-            } else if (type == 'D') {
-                addParty(name, type);
-                for (auto d: _democrats) {
-                    addDemocraticToParty(d);
-                }
-                break;
-            } else {
-                cout << "Please enter valid details" << endl;
-                continue;
-            }
+    cout << "Name: " << endl;
+    cin >> name;
+    char type;
+    cout << "Republican or Democratic party " << endl;
+    cin >> type;
+    if (cin.fail() || checkIfValidParty(name) || (type != 'R' && type != 'D')) {
+        throw InvalidDetails();
+    }
+    if (type == 'R') {
+        addParty(name, type);
+        for (auto r: _republicans) {
+            addRepublicanToParty(r);
         }
-    } while (true);
+    } else if (type == 'D') {
+        addParty(name, type);
+        for (auto d: _democrats) {
+            addDemocraticToParty(d);
+        }
+    }
+
 }
 
 void PoliticalSys::addPolitician() {
@@ -90,16 +76,8 @@ void PoliticalSys::addPolitician() {
     cout << "Leader or Social " << endl;
     cin >> type;
     if (cin.fail() || (RorD != 'R' && RorD != 'D') || (type != 'L' && type != 'S')
-        || (power < 0) || (id < 0) || (firstname.empty()) || (lastname.empty())) {
-        cin.clear();
-        cout << "Please enter valid details" << endl
-             << "First name: " << endl
-             << "Last name: " << endl << lastname << endl
-             << "ID: " << endl << id << endl
-             << "Power: " << endl << power << endl
-             << "Republican or Democratic person " << endl << RorD << endl
-             << "Leader or Social " << endl << type << endl;
-        return;
+        || (power < 0) || (id < 0) || (firstname.empty()) || (lastname.empty()) || (checkIfValidID(id))) {
+        throw InvalidPoliticianInput(firstname, lastname, id, power, RorD, type);
     }
     Politician *politician;
     if (RorD == 'R') {
@@ -125,23 +103,14 @@ void PoliticalSys::addDemocratic(Politician *democratic) {
 }
 
 void PoliticalSys::removePolitician() {
-    cout << "---Remove Politician---" << endl;
     int ID;
-    do {
-        cout << "Enter the ID: " << endl;
-        cin >> ID;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please enter a valid id" << endl;
-            continue;
-        }
-        if (!checkIfValidID(ID)) {
-            cout << "Please enter a valid id" << endl;
-            continue;
-        }
-        break;
-    } while (true);
+    cout << "Enter the ID: " << endl;
+    cin >> ID;
+    if (cin.fail() || !checkIfValidID(ID)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        throw InvalidID();
+    }
     for (auto politician: _politicians) {
         if (politician->getId() == ID) {
             if (politician->getParty() != nullptr) {
@@ -163,28 +132,20 @@ void PoliticalSys::removePolitician() {
 }
 
 void PoliticalSys::removeParty() {
-    cout << "---Remove Party---" << endl;
     string name;
-    do {
-        cout << "Enter party name: " << endl;
-        cin >> name;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Please enter a valid name" << endl;
-            continue;
-        }
-        if (!checkIfValidParty(name)) {
-            cout << "Please enter a valid name" << endl;
-            continue;
-        }
-        break;
-    } while (true);
+    cout << "Enter party name: " << endl;
+    cin >> name;
+    if (cin.fail() || !checkIfValidParty(name)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        throw InvalidName();
+    }
     for (auto party: _parties) {
         if (party->getName() == name) {
             vector<Politician *> ps = party->getPoliticians();
             char type = politicianInVector(_republicans, ps.front()) ? 'R' : 'D';
             for (auto politician: ps) {
+                politician->setParty(nullptr);
                 if (type == 'R') {
                     _republicanParties.erase(remove(_republicanParties.begin(), _republicanParties.end(), party),
                                              _republicanParties.end());
@@ -196,6 +157,7 @@ void PoliticalSys::removeParty() {
                 }
             }
             _parties.erase(remove(_parties.begin(), _parties.end(), party), _parties.end());
+            _biggestParty.erase(remove(_biggestParty.begin(), _biggestParty.end(), party), _biggestParty.end());
             this->heapifyBiggestVector();
             delete party;
             break;
@@ -241,7 +203,9 @@ PoliticalSys::PoliticalSys(char *filename) {
     }
     string line;
     getline(file, line);
-    while (getline(file, line) && line != "Parties:") {
+    if (line[line.size() - 1] == '\r') line.erase(line.size() - 1);
+    while (getline(file, line) && line != "Parties:") { // read politicians
+        if (line[line.size() - 1] == '\r') line.erase(line.size() - 1);
         string firstname;
         string lastname;
         int id;
@@ -261,20 +225,13 @@ PoliticalSys::PoliticalSys(char *filename) {
         _politicians.push_back(politician);
     }
     while (getline(file, line)) { // Read parties
+        if (line[line.size() - 1] == '\r') line.erase(line.size() - 1);
         string name;
         char RorD;
         istringstream ss(line);
         ss >> name >> RorD;
         addParty(name, RorD);
     }
-
-    for (auto republican: _republicans) {
-        addRepublicanToParty(republican);
-    }
-    for (auto democratic: _democrats) {
-        addDemocraticToParty(democratic);
-    }
-
     this->heapifyBiggestVector();
 }
 
@@ -298,11 +255,17 @@ void PoliticalSys::addParty(string name, char t) {
         _parties.push_back(party);
         _biggestParty.push_back(party);
         _republicanParties.push_back(party);
+        for (auto r: _republicans) {
+            addRepublicanToParty(r, party);
+        }
     } else if (t == 'D') {
         DemocraticParty *party = new DemocraticParty(name);
         _parties.push_back(party);
         _biggestParty.push_back(party);
         _democraticParties.push_back(party);
+        for (auto d: _democrats) {
+            addDemocraticToParty(d, party);
+        }
     }
 
 }
@@ -328,20 +291,34 @@ void PoliticalSys::addRepublicanToParty(Politician *r) {
     if (_republicanParties.empty() || r == nullptr) {
         return;
     }
-    Party *party = nullptr;
-    Party *prevParty = r->getParty();
-    int lowestPMembers = numeric_limits<int>::max();
+    Party *currParty = r->getParty();
     for (auto p: _republicanParties) {
-        if (p->getSize() < lowestPMembers) {
-            lowestPMembers = p->getSize();
-            party = p;
+        if (currParty == nullptr) {
+            p->addPolitician(r);
+            r->setParty(p);
+            currParty = p;
+            continue;
+        }
+        if (p->getSize() < currParty->getSize()) {
+            currParty->removePolitician(r);
+            p->addPolitician(r);
+            r->setParty(p);
+            currParty = p;
         }
     }
-    if (prevParty != nullptr) {
-        prevParty->removePolitician(r);
-        r->setParty(nullptr);
+    this->heapifyBiggestVector();
+}
+
+void PoliticalSys::addRepublicanToParty(Politician *r, Party *p) {
+    if (p == nullptr || r == nullptr) return;
+    if (r->getParty() == nullptr) {
+        p->addPolitician(r);
+        r->setParty(p);
+    } else if (p->getSize() < r->getParty()->getSize()) {
+        r->getParty()->removePolitician(r);
+        p->addPolitician(r);
+        r->setParty(p);
     }
-    party->addPolitician(r);
     this->heapifyBiggestVector();
 }
 
@@ -349,20 +326,35 @@ void PoliticalSys::addDemocraticToParty(Politician *d) {
     if (_democraticParties.empty() || d == nullptr) {
         return;
     }
-    Party *party = nullptr;
-    Party *prevParty = d->getParty() ? d->getParty() : nullptr;
-    int lowestPMembers = numeric_limits<int>::max();
+    Party *currParty = d->getParty();
     for (auto p: _democraticParties) {
-        if (p->getSize() < lowestPMembers) {
-            lowestPMembers = p->getSize();
-            party = p;
+        if (currParty == nullptr) {
+            p->addPolitician(d);
+            d->setParty(p);
+            currParty = p;
+            continue;
+        }
+        if (p->getSize() < currParty->getSize()) {
+            currParty->removePolitician(d);
+            p->addPolitician(d);
+            d->setParty(p);
+            currParty = p;
         }
     }
-    if (prevParty != nullptr) {
-        prevParty->removePolitician(d);
-        d->setParty(nullptr);
+    this->heapifyBiggestVector();
+}
+
+void PoliticalSys::addDemocraticToParty(Politician *d, Party *p) {
+    if (p == nullptr || d == nullptr) return;
+    if (d->getParty() == nullptr) {
+        p->addPolitician(d);
+        d->setParty(p);
     }
-    party->addPolitician(d);
+    if (p->getSize() < d->getParty()->getSize()) {
+        d->getParty()->removePolitician(d);
+        p->addPolitician(d);
+        d->setParty(p);
+    }
     this->heapifyBiggestVector();
 }
 
@@ -381,7 +373,6 @@ void PoliticalSys::printRepublicanParties() {
 }
 
 bool PoliticalSys::checkIfValidID(int id) {
-    if (id < 0) return false;
     for (auto politician: _politicians) {
         if (politician->getId() == id) {
             return true;
@@ -391,7 +382,6 @@ bool PoliticalSys::checkIfValidID(int id) {
 }
 
 bool PoliticalSys::checkIfValidParty(string basicString) {
-    if (basicString.empty()) return false;
     for (auto party: _parties) {
         if (party->getName() == basicString) {
             return true;
