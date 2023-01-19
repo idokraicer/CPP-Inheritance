@@ -6,11 +6,11 @@
 #include <iostream>
 
 Leader::Leader(const string &firstname, const string &lastname, int id,
-               int power) : Politician(firstname, lastname, id, power){
+               int power) : Politician(firstname, lastname, id, power){ // constructor
 }
 
 
-void Leader::print() const {
+void Leader::print() const { // print the politician
 
     cout << "Person:" << this->getFirstname() << " "
        << this->getLastname() << ", Id:" << this->getId()
@@ -22,14 +22,8 @@ void Leader::print() const {
 }
 
 int Leader::getPowerDuringPrimaries() {
-    return this->power;
+    return this->power; // the power of the leader is the same during primaries
 }
 
-
-
-//ostream &operator<<(ostream &os, const Leader &leader) {
-//    cout<<"Leader print."<<endl;
-//    return leader.print(os);
-//}
 
 

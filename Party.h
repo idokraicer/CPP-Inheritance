@@ -14,28 +14,28 @@ using namespace std;
 class Politician;
 class Observable;
 
-class Party : public Observable {
+class Party : public Observable { // Party class, abstract class for all parties (Democratic, Republican)
+    // Inherited from Observable class, so it can be observed by the politicians in the party, which are the observers
 private:
-    string name;
-    int size;
+    string name; // name of the party
+    int size; // number of politicians in the party
 public:
-    Politician* leader;
-    vector<Politician*> politicians;
-    explicit Party(const string& name);
+    Politician* leader; // the leader of the party
+    vector<Politician*> politicians; // vector of all the politicians in the party
+    explicit Party(const string& name); // constructor
     bool findLeader(); // Notify observers using NotifyObservers()
     Politician* getLeader(); // Notify observers using NotifyObservers()
     void addPolitician(Politician* politician); // AddObserver
     void removePolitician(Politician* politician); // RemoveObserver
-    virtual void print() const;
-    void preformPrimaries();
-    int getSize() const;
-    string getName() const {return name;};
-    bool operator>(const Party& other) const;
-    int power() const;
-    bool containsPolitician(Politician* politician) const;
+    virtual void print() const; // print the party
+    void preformPrimaries(); // preform primaries
+    int getSize() const; // get the size of the party
+    string getName() const {return name;}; // get the name of the party
+    bool operator>(const Party& other) const; // operator overloading for comparing parties
+    int power() const; // get the power of the party
 //    friend ostream& operator<<(ostream& os, const Party& party);
-    vector<Politician *> getPoliticians();
-    void NotifyObservers() override;
+    vector<Politician *> getPoliticians(); // get the politicians in the party
+    void NotifyObservers() override; // Notify observers using NotifyObservers()
 };
 
 

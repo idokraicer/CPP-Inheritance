@@ -10,9 +10,9 @@ class Observable;
 
 // The Observer class defines an interface for receiving updates from the
 // Observable.
-class Observer {
+class Observer { // Abstract Observer class
 public:
-    virtual void Update(Observer *observer) = 0;
+    virtual void Update(Observer *observer) = 0; // update the observer
 };
 
 

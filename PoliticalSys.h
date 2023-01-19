@@ -26,43 +26,39 @@ private:
     vector<DemocraticParty*> _democraticParties;
     vector<Party*> _biggestParty;
 public:
-    PoliticalSys(char *string1);
-    void addParty();
-    void addParty(string, char);
-    void addPolitician();
-    void addRepublican(Politician* republican);
-    void addDemocratic(Politician* democratic);
-    void addRepublicanParty(RepublicanParty* republicanParty);
-    void addDemocraticParty(DemocraticParty* democraticParty);
-    void printParties();
-    void printPoliticians();
-    void printDemocrats();
-    void printRepublicans();
-    void printRepublicanParties();
-    void printDemocraticParties();
+    PoliticalSys(char *string1); // Constructor, gets a file name
+    void addParty(); // Add a party to the system
+    void addParty(string, char); // Add a party to the system
+    void addPolitician(); // Add a politician to the system
+    void addRepublican(Politician* republican); // Add a politician to the system
+    void addDemocratic(Politician* democratic); // Add a politician to the system
+    void addRepublicanParty(RepublicanParty* republicanParty); // Add a politician to the system
+    void addDemocraticParty(DemocraticParty* democraticParty); // Add a politician to the system
+    void printParties(); // Print all parties in the system
+    void printPoliticians(); // Print all politicians in the system
     friend ostream& operator<<(ostream& os, const PoliticalSys& politicalSys);
-    void removePolitician();
-    void removeParty();
+    void removePolitician(); // Remove a politician from the system
+    void removeParty(); // Remove a party from the system
 
-    void elections();
+    void elections(); // Run elections
 
-    void BiggestParty();
+    void BiggestParty(); // Print the biggest party in the system
 
-    virtual ~PoliticalSys();
-    bool checkIfValidID(int id);
+    virtual ~PoliticalSys(); // Destructor
+    bool checkIfValidID(int id); // Check if a given ID is valid
 
 
-    bool politicianInVector(vector<Politician *> politicians, Politician *politician);
+    bool politicianInVector(vector<Politician *> politicians, Politician *politician); // Check if a given politician is in a given vector
 
-    bool checkIfValidParty(string basicString);
+    bool checkIfValidParty(string basicString); // Check if a given party is valid
 
-    void heapifyBiggestVector();
+    void heapifyBiggestVector(); // Heapify the biggest party vector
 
-    void addRepublicanToParty(Politician* r);
-    void addDemocraticToParty(Politician* d);
+    void addRepublicanToParty(Politician* r); // Add a republican to a party
+    void addDemocraticToParty(Politician* d); // Add a democratic to a party
 
-    void addRepublicanToParty(Politician *r, Party *p);
-    void addDemocraticToParty(Politician *d, Party *p);
+    void addRepublicanToParty(Politician *r, Party *p); // Add a republican to a party
+    void addDemocraticToParty(Politician *d, Party *p); // Add a democratic to a party
 };
 
 

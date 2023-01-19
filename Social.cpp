@@ -5,7 +5,7 @@
 #include "Social.h"
 
 
-void Social::print() const {
+void Social::print() const { // print the social
 
     cout << "Person:" << this->getFirstname() << " "
        << this->getLastname() << ", Id:" << this->getId()
@@ -16,11 +16,7 @@ void Social::print() const {
 
 }
 
-int Social::getPowerDuringPrimaries() {
-    return this->power * 2;
+int Social::getPowerDuringPrimaries() { // get the power of the social during the primaries
+    return this->power * 2; // the power of the social is double the power of the politician
 }
 
-//ostream &operator<<(ostream &os, const Social &social) {
-//    cout<<"Leader print."<<endl;
-//    return social.print(os);
-//}

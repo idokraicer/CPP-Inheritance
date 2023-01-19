@@ -8,14 +8,11 @@
 #include "Party.h"
 #include "Republican.h"
 
-class RepublicanParty : public Party {
+class RepublicanParty : public Party { // Republican party class that inherits from Party
 public:
-    using Party::Party;
-//    RepublicanParty(string name);
-//    friend ostream &operator<<(ostream &os, const RepublicanParty &party);
-    void print() const override;
-    friend class PoliticalSys;
-//    void Update(Observable* observable) override;
+    using Party::Party; // using the constructor of the party
+    void print() const override; // print the republican party
+    friend class PoliticalSys; // friend class of the political system
 };
 
 

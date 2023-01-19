@@ -9,14 +9,13 @@ using namespace std;
 
 #include "Politician.h"
 
-class Social : public Politician {
-    using Politician::Politician;
+class Social : public Politician { // Social class that inherits from Politician
+    using Politician::Politician; // using the constructor of the politician
 public:
-//    friend ostream& operator<<(ostream& os, const Social& social);
 
-    void print() const override;
-    int getPowerDuringPrimaries() override;
-    bool ableToRunForPresident() override {return false;}
+    void print() const override; // print the social
+    int getPowerDuringPrimaries() override; // get the power of the social during the primaries
+    bool ableToRunForPresident() override {return false;} // check if the social is able to run for president
 };
 
 

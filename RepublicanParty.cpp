@@ -4,16 +4,7 @@
 
 #include "RepublicanParty.h"
 
-//ostream& operator<<(ostream& os, const RepublicanParty& party) {
-//    os << "Republican" << party.inner;
-//    return os;
-//}
-
-//RepublicanParty::RepublicanParty(string name) : Party(name) {
-//    this->name = name;
-//}
-
-void RepublicanParty::print() const {
+void RepublicanParty::print() const { // print the republican party
     cout << "Republican";
-    Party::print();
+    Party::print(); // print the party
 }

@@ -10,18 +10,15 @@
 
 using namespace std;
 
-class Leader : public Politician {
+class Leader : public Politician { // Leader class, inherits from Politician class
 
 public:
-//    using Politician::Politician;
     Leader(const string &firstname, const string &lastname,
-           int id, int power);
-//    virtual ~Leader() = default;
+           int id, int power); // constructor
 
-    void print() const override;
-    int getPowerDuringPrimaries() override;
-    bool ableToRunForPresident() override {return true;}
-//    friend ostream& operator<<(ostream& os, const Leader& leader);
+    void print() const override; // print the politician
+    int getPowerDuringPrimaries() override; // get the power of the politician during primaries
+    bool ableToRunForPresident() override {return true;} // check if the politician is able to run for president
 };
 
 

@@ -9,15 +9,15 @@
 #include "Party.h"
 #include "Democratic.h"
 
-class DemocraticParty : public Party {
+class DemocraticParty : public Party { // DemocraticParty class, inherits from Party class
 public:
-    using Party::Party;
+    using Party::Party; // using the constructor of the Party class
 
-    void print() const override;
+    void print() const override; // print the DemocraticParty
 
-    friend class PoliticalSys;
+    friend class PoliticalSys; // PoliticalSys is a friend class
 
-    virtual ~DemocraticParty();
+    virtual ~DemocraticParty(); // destructor
 };
 
 

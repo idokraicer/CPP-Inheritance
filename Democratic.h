@@ -13,20 +13,19 @@
 #include "Party.h"
 class Party;
 
-class Democratic : public Politician{
+class Democratic : public Politician{ // Democratic class, inherits from Politician class
 protected:
-    Politician *inner;
+    Politician *inner; // inner politician
 public:
-    Democratic(const string &firstname, const string &lastname, int id, int power, char type);
-    void print() const override;
-//    void Update(Observable* observable) override;
-    string getFirstname() const;
-    int getPowerDuringPrimaries() override;
-    bool ableToRunForPresident() override;
-    virtual ~Democratic() {
+    Democratic(const string &firstname, const string &lastname, int id, int power, char type); // constructor
+    void print() const override; // print the democratic politician
+    string getFirstname() const; // get the first name of the politician
+    int getPowerDuringPrimaries() override; // get the power of the politician during primaries
+    bool ableToRunForPresident() override; // check if the politician is able to run for president
+    virtual ~Democratic() { // destructor
         delete inner;
     };
-    void Update(Observer* observer) override;
+    void Update(Observer* observer) override; // update the politician, the observer is the leader of the party
 };
 
 

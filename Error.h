@@ -4,61 +4,46 @@
 
 #ifndef EX5_ERROR_H
 #define EX5_ERROR_H
+
 #include <exception>
 #include <string>
 #include <cstring>
+
 using namespace std;
 
-class Error : public std::exception {
+class Error : public std::exception { // Error class, used for throwing errors
 public:
-    virtual const char* what() const noexcept { return output; };
-    ~Error() noexcept override { delete[] output;};
+    virtual const char *what() const noexcept { return output; }; // what function, returns the error message
+
+    ~Error() noexcept override { delete[] output; }; // destructor
 protected:
-    char* output;
+    char *output; // the error message
 };
 
-class InvalidPoliticianInput : public Error {
 
+class InvalidDetails : public Error { // InvalidDetails class, used for throwing error when the details of a politician are invalid
 public:
-    InvalidPoliticianInput(string &firstname, string &lastname, int &id, int &power, char &RorD, char &type) : Error() {
-        string o = "Please enter valid details\nFirst name: \n"+ firstname + "\n" +
-             "Last name: \n" + lastname + "\n" +
-             "ID: \n" + to_string(id) + "\n" +
-             "Power: \n" + to_string(power) + "\n" +
-             "Republican or Democratic person \n" + RorD + "\n" +
-             "Leader or Social \n" + type + "\n";
+    InvalidDetails() : Error() { // constructor
+        string o = "Please enter valid details\n"; // the error message
         delete[] output;
         output = new char[o.length() + 1];
-        strcpy(output, o.c_str());
-    }
-    virtual const char* what() const noexcept {
-        return output;
+        strcpy(output, o.c_str()); // copy the error message to the output
     }
 };
 
-class InvalidDetails : public Error {
+class InvalidID : public Error { // InvalidID class, used for throwing error when the ID is invalid
 public:
-    InvalidDetails() : Error() {
-        string o = "Please enter valid details\n";
+    InvalidID() : Error() { // constructor
+        string o = "Please enter valid id\n"; // the error message
         delete[] output;
         output = new char[o.length() + 1];
-        strcpy(output, o.c_str());
+        strcpy(output, o.c_str()); // copy the error message to the output
     }
 };
 
-class InvalidID : public Error {
+class InvalidName : public Error { // InvalidName class, used for throwing error if name is invalid
 public:
-    InvalidID() : Error() {
-        string o = "Please enter valid id\n";
-        delete[] output;
-        output = new char[o.length() + 1];
-        strcpy(output, o.c_str());
-    }
-};
-
-class InvalidName : public Error {
-public:
-    InvalidName() : Error() {
+    InvalidName() : Error() { // constructor
         string o = "Please enter valid name\n";
         delete[] output;
         output = new char[o.length() + 1];

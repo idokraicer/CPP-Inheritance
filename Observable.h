@@ -10,14 +10,14 @@
 
 #include "Observer.h"
 
-class Observable {
+class Observable { // Observable class
 public:
-    void AddObserver(Observer* observer);
-    void RemoveObserver(Observer* observer);
-    virtual void NotifyObservers()=0;
+    void AddObserver(Observer* observer); // add an observer to the list of observers
+    void RemoveObserver(Observer* observer); // remove an observer from the list of observers
+    virtual void NotifyObservers()=0; // notify the observers
 
 protected:
-    std::vector<Observer*> observers_;
+    std::vector<Observer*> observers_; // list of observers
 };
 
 

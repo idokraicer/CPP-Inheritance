@@ -6,19 +6,9 @@
 
 using namespace std;
 
-//DemocraticParty::DemocraticParty(string& name) : Party(name) {
-//    this->inner = new Party(name);
-//}
 
-void DemocraticParty::print() const {
-    cout << "Democratic";
-    Party::print();
+void DemocraticParty::print() const { // A print function for DemocraticParty
+    cout << "Democrat";
+    Party::print(); // print the party using the print function of the Party class
 }
 
-DemocraticParty::~DemocraticParty() {
-//    delete inner;
-}
-//ostream& operator<<(ostream& os, const DemocraticParty& party) {
-//    os << "Democratic" << party.inner;
-//    return os;
-//}
